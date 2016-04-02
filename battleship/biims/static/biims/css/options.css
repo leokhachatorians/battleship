@@ -1,0 +1,46 @@
+/* ------ BASE Settings ------ */
+body {
+  background-color: #2C3539;
+}
+
+/* Navbar Settings */
+.navbar-header:active {
+  background-color: #fff;
+}
+.navbar-item:hover,
+.navbar-item:focus,
+.navbar-header:hover,
+.navbar-header:focus {
+  background-color: #cdddeb;
+}
+
+.title_large {
+  color: #fff;
+  font-size:50px;
+  text-align: center;
+}
+.title_small {
+  color: #fff;
+  font-size: 25px;
+  text-align: center;
+}
+
+/* Buttons For Determining What BIIM Action */
+.option{
+  padding: 15px;
+  background-color:#005b96;
+  color: #fff;
+  text-align:center;
+  box-shadow: 0 2px 1px rgba(0,0,0,0.6);
+}
+
+.option:focus,
+.option:active,
+.option:hover {
+  background-color: #03396c;
+}
+
+.option:active {
+  background-color: #022c53;
+}
+
