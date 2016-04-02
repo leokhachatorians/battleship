@@ -21,7 +21,11 @@
    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      <ul class="nav navbar-nav">
        <li class="navbar-item"><a href="#">Home</a></li>
-       <li class="navbar-item"><a href="{% url 'biims:index' %}">Login</a></li>
+			 	{% if user.is_authenticated %}
+				<li class="navbar-item"><a href="{% url 'biims:logout' %}">Logout</a></li>
+				{% else %}
+				<li class="navbar-item"><a href="{% url 'biims:login_page' %}">Login</a></li>
+				{% endif %}
      </ul>
    </div>
  </nav>

@@ -4,17 +4,19 @@ from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
 from django.template import loader
-from django.contrib.auth import authenticate, login as login_user
+from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
+from django.contrib import messages
 
-def index(request):
-    return render(request, 'biims/index.html')
+def login_page(request):
+    if request.user.is_authenticated():
+        return render(request, 'biims/options.html')
+    return render(request, 'biims/login_page.html')
 
 @login_required
 def options(request):
-    template = loader.get_template('biims/options.html')
-    return HttpResponse(template.render(request))
+    return render(request, 'biims/options')
 
 def login(request):
     username = request.POST.get('username', '')
@@ -25,10 +27,12 @@ def login(request):
     if user is not None:
         if user.is_active:
             login_user(request, user)
-            return HttpResponse("Welcome, {}".format(user.username))
-
+            return render(request, 'biims/options.html')
     else:
-        return HttpResponse("NOPE")
+        messages.add_message(request, messages.WARNING, 'Invalid Credentials')
+        return render(request, 'biims/login_page.html')
 
 def logout(request):
-    return HttpResponse("shit")
+    if request.user.is_authenticated():
+        logout_user(request) 
+    return render(request, 'biims/login_page.html')

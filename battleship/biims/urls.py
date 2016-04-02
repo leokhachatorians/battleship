@@ -4,7 +4,7 @@ from . import views
 
 urlpatterns = [
         # Index
-        url(r'^$', views.index, name="index"),
+        url(r'^$', views.login_page, name="login_page"),
 
         # Options
         url(r'^options/$', views.options),
