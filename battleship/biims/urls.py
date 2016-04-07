@@ -7,7 +7,7 @@ urlpatterns = [
         url(r'^$', views.login_page, name="login_page"),
 
         # Options
-        url(r'^options/$', views.options),
+        url(r'^options/$', views.options, name='options'),
 
         # User Login/Logout Stuff
         url(r'^login', views.login, name="login"),

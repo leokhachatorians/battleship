@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, render_to_response
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
@@ -16,7 +16,7 @@ def login_page(request):
 
 @login_required
 def options(request):
-    return render(request, 'biims/options')
+    return render(request, 'biims/options.html')
 
 def login(request):
     username = request.POST.get('username', '')
@@ -27,7 +27,7 @@ def login(request):
     if user is not None:
         if user.is_active:
             login_user(request, user)
-            return render(request, 'biims/options.html')
+            return redirect('/biims/options')
     else:
         messages.add_message(request, messages.WARNING, 'Invalid Credentials')
         return render(request, 'biims/login_page.html')

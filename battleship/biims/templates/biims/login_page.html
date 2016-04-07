@@ -9,7 +9,7 @@
                   alt="">
 						{% if messages %}
 							{% for message in messages %}
-							<span class="alert alert-danger" role="alert">{{ message }}</span>
+							<span class="red-error-flash" role="alert">{{ message }}</span>
 							{% endfor %}
 						{% endif %}
                   <form action="{% url 'biims:login' %}" method="post" class="form-signin"> {% csrf_token %}

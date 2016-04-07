@@ -66,3 +66,11 @@
     display: block;
     margin-top: 10px;
 }
+
+.red-error-flash {
+  background-color: #fbb0b0;
+  text-align:center;
+  display: block;
+  padding: 10px;
+  margin: 0 auto 10px;
+}
