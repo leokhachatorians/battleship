@@ -21,11 +21,22 @@
    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      <ul class="nav navbar-nav">
        <li class="navbar-item"><a href="#">Home</a></li>
-			 	{% if user.is_authenticated %}
-				<li class="navbar-item"><a href="{% url 'biims:logout' %}">Logout</a></li>
-				{% else %}
-				<li class="navbar-item"><a href="{% url 'biims:login_page' %}">Login</a></li>
-				{% endif %}
+	     	{% if user.is_authenticated %}
+	        <li class="navbar-item"><a href="{% url 'biims:logout' %}">Logout</a></li>
+	      {% else %}
+	        <li class="navbar-item"><a href="{% url 'biims:login' %}">Login</a></li>
+	      {% endif %}
+     </ul>
+     <ul class="nav navbar-nav pull-right">
+        <li class="navbar-item">
+          {% if messages %}
+            {% for message in messages %}
+              {% ifequal message.tags "login_message info" %}
+              <a href-"#">{{ message }}</a>
+               {% endifequal %}
+             {% endfor %}
+          {% endif %}
+        </li>
      </ul>
    </div>
  </nav>

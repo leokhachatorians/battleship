@@ -9,30 +9,45 @@ from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.contrib import messages
 
-def login_page(request):
-    if request.user.is_authenticated():
-        return render(request, 'biims/options.html')
-    return render(request, 'biims/login_page.html')
-
 @login_required
 def options(request):
     return render(request, 'biims/options.html')
 
 def login(request):
-    username = request.POST.get('username', '')
-    password = request.POST.get('password', '')
+    if request.user.is_authenticated():
+        messages.info(
+                request,
+                'You\'re already logged in',
+                extra_tags="login_message")
+        return render(request, 'biims/options.html')
 
-    user = authenticate(username=username, password=password)
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('password', '')
 
-    if user is not None:
-        if user.is_active:
-            login_user(request, user)
-            return redirect('/biims/options')
+        user = authenticate(username=username, password=password)
+
+        if user is not None:
+            if user.is_active:
+                login_user(request, user)
+                messages.info(
+                    request,
+                    'Welcome {}'.format(request.user.username),
+                    extra_tags="login_message")
+                return redirect('/biims/options')
+        else:
+            messages.error(request,
+                    'Invalid Credentials',
+                    extra_tags="wrong_login")
+            return render(request, 'biims/login_page.html')
     else:
-        messages.add_message(request, messages.WARNING, 'Invalid Credentials')
         return render(request, 'biims/login_page.html')
 
 def logout(request):
     if request.user.is_authenticated():
         logout_user(request) 
+        messages.info(
+                request,
+                "Logged out succesfully",
+                extra_tags="login_message")
     return render(request, 'biims/login_page.html')
