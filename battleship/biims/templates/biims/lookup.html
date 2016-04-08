@@ -1,0 +1,18 @@
+{% extends 'biims/base.html' %}
+{% block content %}
+<br/>
+<div class="row">
+  <ul>
+    {% for part in parts %}
+      <h1 class="post"> {{ part.name }}</h1>
+      <li>
+        <p class="post">{{ part.quantity }}</p>
+        <p class="post">{{ part.storage_location }}</p>
+        <p class="post">{{ part.consumable_location }}</p>
+        <p class="post">{{ part.last_reorder_date }}</p>
+        <p class="post">{{ part.last_reorder_quanitity }}</p>
+       </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
