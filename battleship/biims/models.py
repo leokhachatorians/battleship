@@ -4,15 +4,30 @@ class Item(models.Model):
     name = models.CharField(max_length=200)
     
     storage_location = models.CharField(max_length=200)
-
-    is_consumable = models.BooleanField(default=False)
-    consumable_location = models.CharField(max_length=200)
-
-    is_asset = models.BooleanField(default=False)
-    asset_location = models.CharField(max_length=200)
     
     quantity = models.IntegerField(default=0)
     reorder_point = models.IntegerField(default=0)
 
     last_reorder_date = models.DateTimeField('last reorder date')
     last_reorder_quantity = models.IntegerField(default=0)
+
+    is_easy_consumable = False
+    is_low_volume = False
+    is_asset = False
+
+    def reorder_check(self):
+        if self.quantity < self.reorder_point:
+            return 'Need to reorder'
+    
+    class Meta:
+        abstract = True
+
+class HighVolume(Item):
+    is_easy_consumable = True
+    consumable_location = models.CharField(max_length=200)
+
+class LowVolume(Item):
+    is_low_volume = True
+
+class Asset(Item):
+    is_asset = True

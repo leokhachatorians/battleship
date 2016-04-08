@@ -5,6 +5,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'biims/css/bootstrap.min.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'biims/css/login.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'biims/css/options.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'biims/css/base.css' %}"/>
   </head>
 
  <body>
@@ -20,10 +21,11 @@
    </div>
    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
      <ul class="nav navbar-nav">
-       <li class="navbar-item"><a href="#">Home</a></li>
 	     	{% if user.is_authenticated %}
+          <li class="navbar-item"><a href="{% url 'biims:options' %}">Home</a></li>
 	        <li class="navbar-item"><a href="{% url 'biims:logout' %}">Logout</a></li>
 	      {% else %}
+          <li class="navbar-item"><a href="{% url 'biims:login' %}">Home</a></li>
 	        <li class="navbar-item"><a href="{% url 'biims:login' %}">Login</a></li>
 	      {% endif %}
      </ul>

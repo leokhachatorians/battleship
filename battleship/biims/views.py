@@ -9,6 +9,8 @@ from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.contrib import messages
 
+from .models import HighVolume, LowVolume, Asset
+
 @login_required
 def options(request):
     return render(request, 'biims/options.html')
@@ -51,3 +53,8 @@ def logout(request):
                 "Logged out succesfully",
                 extra_tags="login_message")
     return render(request, 'biims/login_page.html')
+
+@login_required
+def parts_lookup(request):
+    parts = HighVolume.objects.all()
+    return render(request, 'biims/lookup.html', {"parts":parts})

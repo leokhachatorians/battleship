@@ -12,4 +12,7 @@ urlpatterns = [
 
         # User Login/Logout Stuff
         url(r'^logout', views.logout, name="logout"),
+        
+        # Parts Look Up
+        url(r'^parts_lookup', views.parts_lookup, name='parts_lookup'),
     ]
