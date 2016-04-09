@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views import generic
 from django.utils import timezone
 from django.template import loader
@@ -55,6 +56,38 @@ def logout(request):
     return render(request, 'biims/login_page.html')
 
 @login_required
-def parts_lookup(request):
-    parts = HighVolume.objects.all()
-    return render(request, 'biims/lookup.html', {"parts":parts})
+def part_lookup(request):
+    part_list = HighVolume.objects.all()
+    paginator = Paginator(part_list, 20)
+    
+    page = request.GET.get('page')
+    try:
+        parts = paginator.page(page)
+    except PageNotAnInteger:
+        parts = paginator.page(1)
+    except EmptyPage:
+        parts = paginator.page(paginator.num_pages)
+
+    return render(
+            request, 
+            'biims/lookup.html', 
+            {"parts":parts})
+
+@login_required
+def asset_lookup(request):
+    asset_list = Asset.objects.all()
+    paginator = Paginator(asset_list, 20)
+
+    page = request.GET.get('page')
+
+    try:
+        assets = paginator.page(page)
+    except PageNotAnInteger:
+        assets = paginator.page(1)
+    except EmptyPage:
+        assets = paginator.page(paginator.num_pages)
+
+    return render(
+            request, 
+            'biims/lookup.html',
+            {"parts":assets})

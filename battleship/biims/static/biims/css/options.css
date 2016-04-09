@@ -36,17 +36,12 @@ body {
 }
 
 .option:focus,
-.option:active,
 .option:hover {
   background-color: #03396c;
+  color: #fff;
+  text-decoration: none;
 }
 
 .option:active {
   background-color: #022c53;
 }
-
-a, a:visited, a:hover, a:active {
-  color: #fff;
-  text-decoration: none;
-}
-

@@ -14,5 +14,6 @@ urlpatterns = [
         url(r'^logout', views.logout, name="logout"),
         
         # Parts Look Up
-        url(r'^parts_lookup', views.parts_lookup, name='parts_lookup'),
+        url(r'^part_lookup', views.part_lookup, name='part_lookup'),
+        url(r'^asset_lookup', views.asset_lookup, name='asset_lookup'),
     ]
