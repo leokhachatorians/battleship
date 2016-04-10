@@ -1,3 +1,7 @@
+import sys
+import itertools
+import json
+
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse
@@ -11,6 +15,8 @@ from django.template.context_processors import csrf
 from django.contrib import messages
 
 from .models import HighVolume, LowVolume, Asset
+from .forms import SearchForm
+from .helpers import fuzzy_pal
 
 @login_required
 def options(request):
@@ -58,7 +64,7 @@ def logout(request):
 @login_required
 def part_lookup(request):
     part_list = HighVolume.objects.all()
-    paginator = Paginator(part_list, 20)
+    paginator = Paginator(part_list, 10)
     
     page = request.GET.get('page')
     try:
@@ -76,7 +82,7 @@ def part_lookup(request):
 @login_required
 def asset_lookup(request):
     asset_list = Asset.objects.all()
-    paginator = Paginator(asset_list, 20)
+    paginator = Paginator(asset_list, 10)
 
     page = request.GET.get('page')
 
@@ -91,3 +97,65 @@ def asset_lookup(request):
             request, 
             'biims/lookup.html',
             {"parts":assets})
+
+@login_required
+def search(request):
+    high_volume_list = HighVolume.objects.all()
+    low_volume_list = LowVolume.objects.all()
+    asset_list = Asset.objects.all()
+
+    form = SearchForm()
+
+    all_items = list(itertools.chain(
+        high_volume_list,
+        low_volume_list,
+        asset_list))
+
+    paginator = Paginator(all_items, 10)
+
+    page = request.GET.get('page')
+
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(paginator.num_pages)
+
+    return render(
+            request,
+            'biims/search.html',
+            {
+                "parts":items,
+                "form":form
+            },)
+
+@login_required
+def ajax_search(request):
+    if request.method == "POST":
+        high_volume_list = HighVolume.objects.all()
+        low_volume_list = LowVolume.objects.all()
+        asset_list = Asset.objects.all()
+
+        search_term = request.POST.get('search_term')
+        response_data = []
+
+        all_items = list(itertools.chain(
+            high_volume_list,
+            low_volume_list,
+            asset_list))
+        
+        potential_matches = fuzzy_pal(search_term, all_items)
+
+        for match in potential_matches:
+            response_data.append(
+                    {'name':match[0]})
+
+        return HttpResponse(
+                json.dumps(response_data),
+                content_type="application/json")
+    else: 
+        return HttpResponse(
+                json.dumps({'nothing to see':'i dont like you'}),
+                content_type="application/json")
+
