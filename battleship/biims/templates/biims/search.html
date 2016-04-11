@@ -1,0 +1,95 @@
+{% extends 'biims/base.html' %}
+{% block content %}
+<br/>
+<div class="row">
+  <h2 class="post">Search</h2>
+  <div id="custom-search-input">
+    <form action="{% url 'biims:ajax_search' %}" method="POST" id="search-form"> {% csrf_token %}
+      <div class="input-group col-md-12">
+        {{ form }}
+        <!--<input type="text" class="search-query form-control" placeholder="Search"/>-->
+        <span class="input-group-btn">
+        <button class="btn btn-danger" type="submit">
+          <span class="glyphicon glyphicon-search"></span>
+         </button>
+         <!--<button class="btn btn-default" data-toggle="modal" data-target="#search-modal" type="button">
+           <span class="glyphicon glyphicon-wrench"></span>
+         </button> -->
+        </span>
+      </div>
+    </form>
+  </div>
+
+<div class="row">
+  <ul id="results">
+    {% for part in parts %}
+      <h1 class="post">{{ part.name }}</h1>
+      <li>
+        <p class="post">Quantity: {{ part.quantity }}</p>
+        <p class="post">Storage Location: {{ part.storage_location }}</p>
+        {% if part.is_easy_consumable %}
+          <p class="post">Consumable Location: {{ part.consumable_location }}</p>
+        {% endif %}
+        <p class="post">Last Reorder: {{ part.last_reorder_date }}</p>
+        <p class="post">Last Reorder Quantity: {{ part.last_reorder_quantity }}</p>
+        {% if part.is_asset %}
+          <button class="btn btn-danger">
+            <span class="glyphicon glyphicon-wrench"></span>
+          </button>
+          {% endif %}
+       </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<nav>
+  <ul class="pager">
+      {% if parts.has_previous %}
+        <li><a href="?page={{ parts.previous_page_number }}" aria-label="Previous">
+          <span class="glyphicon glyphicon-chevron-left">
+        </a></li>
+      {% endif %}
+
+      <span class="post">
+         Page {{ parts.number }} of {{ parts.paginator.num_pages }}
+      </span>
+
+      {% if parts.has_next %}
+        <li><a href="?page={{ parts.next_page_number }}" aria-label="Next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </a></li>
+      {% endif %}
+  </ul>
+</nav>
+
+<div class="modal fade" id="search-modal" tabindex="-1" role="dialog" aria-labelledby="settings-label">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="model-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="settings-label">Settings</h4>
+      </div>
+      <div class="modal-body">
+        <form action="/biims/search" method="post"> {% csrf_token %}
+          <div class="checkbox">
+            <label><input type="checkbox" name="highvolume" id="highvolume" value="True">High Volume Items</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" name="lowvolume" id="lowvolume" value="True">Low Volume Items</label>
+          </div>
+          <div class="checkbox">
+            <label><input type="checkbox" name="assets" id="assets" value="True">Assets</label>
+          </div>
+          <div class="modal-footer">
+            <input type="text" class="form-control" placeholder="Search Term" name="search-term-filter"><br>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-default">Search</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

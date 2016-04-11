@@ -111,7 +111,7 @@ def search(request):
         low_volume_list,
         asset_list))
 
-    paginator = Paginator(all_items, 10)
+    paginator = Paginator(all_items, 20)
 
     page = request.GET.get('page')
 
@@ -132,28 +132,41 @@ def search(request):
 
 @login_required
 def ajax_search(request):
-    if request.method == "POST":
+    if request.is_ajax:
         high_volume_list = HighVolume.objects.all()
         low_volume_list = LowVolume.objects.all()
         asset_list = Asset.objects.all()
 
-        search_term = request.POST.get('search_term')
+        search_term = request.GET.get('search_term')
+        print(search_term)
         response_data = []
 
         all_items = list(itertools.chain(
             high_volume_list,
             low_volume_list,
             asset_list))
-        
-        potential_matches = fuzzy_pal(search_term, all_items)
 
-        for match in potential_matches:
-            response_data.append(
-                    {'name':match[0]})
+        matches = fuzzy_pal(search_term, all_items)
 
-        return HttpResponse(
-                json.dumps(response_data),
-                content_type="application/json")
+        #for i in range(len(matches)):
+        #    response_data.append({
+        #            'name':matches[i][0],
+        #            'quantity':matches[i][2].quantity,
+        #            'storage_location':matches[i][2].storage_location,
+        #            'last_reorder_date':str(matches[i][2].last_reorder_date),
+        #            'last_reorder_quantity':matches[i][2].last_reorder_quantity
+        #            })
+        #    try:
+        #        response_data[i]['consumable_location'] = matches[i][2].consumable_location
+        #    except:
+        #        response_data[i]['consumable_location'] = False
+
+        return render(
+                request, 
+                'biims/ajax_search.html',
+                {"matches":matches})
+                #json.dumps(response_data),
+                #content_type="application/json")
     else: 
         return HttpResponse(
                 json.dumps({'nothing to see':'i dont like you'}),

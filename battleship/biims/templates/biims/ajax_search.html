@@ -1,0 +1,20 @@
+{% extends 'biims/base.html' %}
+{% block content %}
+{% for match in matches %}
+  <h1 class="post">{{ match.name }}</h1>
+  <li>
+    <p class="post">Quantity: {{ match.quantity }}</p>
+    <p class="post">Storage Location: {{ match.storage_location }}</p>
+    {% if match.is_easy_consumable %}
+      <p class="post">Consumable Location: {{ match.consumable_location }}</p>
+    {% endif %}
+    <p class="post">Last Reorder Date: {{ match.last_reorder_date }}</p>
+    <p class="post">Last Reorder Quantity: {{ match.last_reorder_quantity }}</p>
+   {% if match.is_asset %}
+    <button class="btn btn-danger">
+      <span class="glyphicon glyphicon-wrench"></span>
+    </button>
+   {% endif %}
+  </li>
+{% endfor %}
+{% endblock %}

@@ -4,9 +4,12 @@ $(function() {
     // Submit post on submit
     $('#search-form').on('submit', function(event){
         event.preventDefault();
-        console.log("form submitted!")  // sanity check
-        search();
+        //console.log("form submitted!")  // sanity check
+        st = $("#search-term").val();
+        $("#results").html('&nbsp;').load('ajax_search?search_term='+st);  
+      //search();
     });
+
 
     // AJAX for posting
     function search() {
@@ -17,15 +20,23 @@ $(function() {
             data : { search_term : $('#search-term').val() }, // data sent with the post request
             // handle a successful response
             success : function(json) {
-                $('#search-term').val(''); // remove the value from the input
+                var st = $('#search-term').val(); // remove the value from the input
                 console.log(json[0].name); // log the returned json to the console
-                $('#results').empty();
-                for(var i=0; i<json.length; i++){
-                  var obj = json[i];
-                  for(var key in obj){
-                    $("#results").append("<li><h1 class='post'>"+obj['name']+"</h1>");
-                  }
-                }
+                console.log(st);
+                //$('#results').html('&nbsp;').load('ajax_search?search_term='+st);
+               // $('#results').empty();
+               // for(var i=0; i<json.length; i++){
+               //   var obj = json[i];
+               //   $("#results").append(
+               //     "<li><h1 class='post'>"+obj['name']+"</h1>" + 
+               //     "<p class='post'>Quantity: "+obj['quantity']+"</p>" +
+               //     "<p class='post'>Storage Location: "+obj['storage_location']+"</p>" +
+               //     "<p class='post'>Consumable Location: "+obj['consumable_location']+"</p>" +
+               //     "<p class='post'>Last Order: "+obj['last_reorder_date']+"</p>" + 
+               //     "<p class='post'>Last Reorder Quantity: "+obj['last_reorder_quantity']+"</p></li>"
+               //     );
+               //   
+               // }
                 console.log("success"); // another sanity check
             },
             // handle a non-successful response
