@@ -3,7 +3,6 @@ $(function() {
   var changetimer = false;
     // Submit post on submit
     $('#search-form').on('submit', function(event){
-      //event.preventDefault();
      // if(changetimer !== false) clearTimeout(changetimer);
      // changetimer = setTimeout(function() {
      //   st = $("#search-term").val();
@@ -11,10 +10,11 @@ $(function() {
      //   changetimer = false;
      //   }, 300);
         event.preventDefault();
+        event.stopImmediatePropagation();
+
         console.log("form submitted!")  // sanity check
         st = $("#search-term").val();
-        $("#results").html('&nbsp;').load('ajax_search?search_term='+st);  
-      //search();
+        $("#results").empty().load('ajax_search?search_term='+st);  
     });
 
 

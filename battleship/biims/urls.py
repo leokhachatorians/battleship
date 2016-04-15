@@ -20,4 +20,6 @@ urlpatterns = [
         #url(r'^search/(?P<item>\w+)/$', views.blah, name="blah"),
         url(r'^search', views.search, name="search"),
         url(r'^ajax_search', views.ajax_search, name="ajax_search"),
+
+        url(r'^new_item', views.new_item, name='new_item'),
     ]

@@ -4,7 +4,7 @@ import json
 
 from django.shortcuts import render, get_object_or_404, render_to_response, redirect
 from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views import generic
 from django.utils import timezone
@@ -13,9 +13,10 @@ from django.contrib.auth import authenticate, login as login_user, logout as log
 from django.contrib.auth.decorators import login_required
 from django.template.context_processors import csrf
 from django.contrib import messages
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import HighVolume, LowVolume, Asset
-from .forms import SearchForm
+from .forms import SearchForm, NewItemForm
 from .helpers import fuzzy_pal
 
 @login_required
@@ -138,8 +139,6 @@ def ajax_search(request):
         asset_list = Asset.objects.all()
 
         search_term = request.GET.get('search_term')
-        print(search_term)
-        response_data = []
 
         all_items = list(itertools.chain(
             high_volume_list,
@@ -147,7 +146,6 @@ def ajax_search(request):
             asset_list))
 
         matches = fuzzy_pal(search_term, all_items)
-
         return render(
                 request, 
                 'biims/ajax_search.html',
@@ -159,4 +157,10 @@ def ajax_search(request):
 
 def increase_amount(request, item_name, item_type):
     item = getattr(sys.modules[__name__], item_type)
+
+def new_item(request):
+    
+    form = NewItemForm()
+    return render(request, 'biims/new_item.html', {'form':form})
+    
 
