@@ -48,3 +48,27 @@ class ItemTestCase(TestCase):
                 reorder_point=5)
 
         self.assertEqual(item.reorder_check(), "Need to reorder")
+
+    def test_reduce_quantity_no_amount_argument(self):
+        item = Asset(quantity=10)
+        item.reduce_quantity()
+        self.assertEqual(item.quantity, 9)
+    
+    def test_reduce_quanity_with_amount_argument(self):
+        item = Asset(quantity=10)
+        item.reduce_quantity(amount=2)
+        self.assertEqual(item.quantity, 8)
+  
+    def test_increase_quantity_no_amount_argument(self):
+        item = Asset(quantity=10)
+        item.increase_quantity()
+        self.assertEqual(item.quantity, 11)
+    
+    def test_increase_quanity_with_amount_argument(self):
+        item = Asset(quantity=10)
+        item.increase_quantity(amount=2)
+        self.assertEqual(item.quantity, 12)
+   
+   
+   
+ 

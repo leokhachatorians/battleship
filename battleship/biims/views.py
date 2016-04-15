@@ -148,27 +148,15 @@ def ajax_search(request):
 
         matches = fuzzy_pal(search_term, all_items)
 
-        #for i in range(len(matches)):
-        #    response_data.append({
-        #            'name':matches[i][0],
-        #            'quantity':matches[i][2].quantity,
-        #            'storage_location':matches[i][2].storage_location,
-        #            'last_reorder_date':str(matches[i][2].last_reorder_date),
-        #            'last_reorder_quantity':matches[i][2].last_reorder_quantity
-        #            })
-        #    try:
-        #        response_data[i]['consumable_location'] = matches[i][2].consumable_location
-        #    except:
-        #        response_data[i]['consumable_location'] = False
-
         return render(
                 request, 
                 'biims/ajax_search.html',
                 {"matches":matches})
-                #json.dumps(response_data),
-                #content_type="application/json")
     else: 
         return HttpResponse(
                 json.dumps({'nothing to see':'i dont like you'}),
                 content_type="application/json")
+
+def increase_amount(request, item_name, item_type):
+    item = getattr(sys.modules[__name__], item_type)
 

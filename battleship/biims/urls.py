@@ -15,7 +15,7 @@ urlpatterns = [
         
         # Parts Look Up
         url(r'^part_lookup', views.part_lookup, name='part_lookup'),
-        url(r'^asset_lookup', views.asset_lookup, name='asset_lookup'),
+        #url(r'^asset_lookup', views.asset_lookup, name='asset_lookup'),
 
         #url(r'^search/(?P<item>\w+)/$', views.blah, name="blah"),
         url(r'^search', views.search, name="search"),
