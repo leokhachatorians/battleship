@@ -1,46 +1,13 @@
 $(function() {
 
-  var changetimer = false;
     // Submit post on submit
     $('#search-form').on('submit', function(event){
-     // if(changetimer !== false) clearTimeout(changetimer);
-     // changetimer = setTimeout(function() {
-     //   st = $("#search-term").val();
-     //   $("#results").html("&nbsp;").load('ajax_search?search_term='+st);
-     //   changetimer = false;
-     //   }, 300);
         event.preventDefault();
         event.stopImmediatePropagation();
 
-        console.log("form submitted!")  // sanity check
         st = $("#search-term").val();
         $("#results").empty().load('ajax_search?search_term='+st);  
     });
-
-
-    // AJAX for posting
-    function search() {
-        console.log("search is working!") // sanity check
-        $.ajax({
-            url : "ajax_search/", // the endpoint
-            type : "POST", // http method
-            data : { search_term : $('#search-term').val() }, // data sent with the post request
-            // handle a successful response
-            success : function(json) {
-                var st = $('#search-term').val(); // remove the value from the input
-                console.log(json[0].name); // log the returned json to the console
-                console.log(st);
-                console.log("success"); // another sanity check
-            },
-            // handle a non-successful response
-            error : function(xhr,errmsg,err) {
-                $('#results').html("<div class='post alert-box alert radius' data-alert>Oops! We have encountered an error: "+errmsg+
-                    " <a href='#' class='close'>&times;</a></div>"); // add the error to the dom
-                console.log(xhr.status + ": " + xhr.responseText); // provide a bit more info about the error to the console
-            }
-        });
-    };
-
 
     // This function gets cookie with a given name
     function getCookie(name) {
@@ -92,4 +59,16 @@ $(function() {
             }
         }
     });
+});
+
+$(document).ready(function() {
+  $('#item-choice-selector').on('change', function () {
+    if(this.value != 'high') {
+      $('#item-consumable-location').val('');
+      $('#id_consumable_location').hide();
+    }
+    else {
+      $('#id_consumable_location').show();
+    }
+  }).trigger('change');
 });

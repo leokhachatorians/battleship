@@ -101,6 +101,16 @@ def asset_lookup(request):
 
 @login_required
 def search(request):
+    """
+    The search functionality is quite simple. Utilizing Django's
+    lazy querysets, we can create a chained list and pass in the
+    all the parts into the paginator. This wont make any excessive
+    querys to the database until AFTER we create the page, which
+    will make it a total of three queryies if I'm not mistaken.
+
+    Now the SearchForm is our gateway towards making ajax calls
+    to our fuzzymatching thing.
+    """
     high_volume_list = HighVolume.objects.all()
     low_volume_list = LowVolume.objects.all()
     asset_list = Asset.objects.all()
@@ -133,6 +143,11 @@ def search(request):
 
 @login_required
 def ajax_search(request):
+    """
+    """
+    if not request.is_ajax:
+        raise Http404
+
     if request.is_ajax:
         high_volume_list = HighVolume.objects.all()
         low_volume_list = LowVolume.objects.all()
@@ -150,17 +165,21 @@ def ajax_search(request):
                 request, 
                 'biims/ajax_search.html',
                 {"matches":matches})
-    else: 
-        return HttpResponse(
-                json.dumps({'nothing to see':'i dont like you'}),
-                content_type="application/json")
-
-def increase_amount(request, item_name, item_type):
-    item = getattr(sys.modules[__name__], item_type)
 
 def new_item(request):
-    
-    form = NewItemForm()
+    if request.method == 'POST':
+        form = NewItemForm(request.POST)
+        if form.is_valid():
+            print(request.POST.get('item_name'))
+            print(request.POST.get('quantity'))
+            print(request.POST.get('storage_location'))
+            if not request.POST.get('consumable_location') == '':
+                print(request.POST.get('consumable_location'))
+            print(request.POST.get('reorder_point'))
+
+            return redirect('biims:options')
+    else:
+        form = NewItemForm()
     return render(request, 'biims/new_item.html', {'form':form})
     
 
