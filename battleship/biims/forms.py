@@ -31,8 +31,7 @@ class NewItemForm(forms.Form):
                 'id':'item-name'}),
             required=True)
 
-    quantity = forms.CharField(
-        max_length=10,
+    quantity = forms.IntegerField(
         label='Quantity',
         widget = forms.NumberInput(attrs=
             {'placeholder':'Quantity',
@@ -58,10 +57,9 @@ class NewItemForm(forms.Form):
             'id':'item-consumable-location'}),
         required=False)
 
-    reorder_point = forms.CharField(
-        max_length=10,
+    reorder_point = forms.IntegerField(
         label='Reorder Point',
-        widget = forms.TextInput(attrs=
+        widget = forms.NumberInput(attrs=
             {'placeholder':'Reorder Point',
             'title':'When to reorder the item',
             'id':'item-reorder-point'}),

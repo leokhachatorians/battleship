@@ -17,7 +17,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from .models import HighVolume, LowVolume, Asset
 from .forms import SearchForm, NewItemForm
-from .helpers import fuzzy_pal
+from . import helpers
 
 @login_required
 def options(request):
@@ -61,43 +61,6 @@ def logout(request):
                 "Logged out succesfully",
                 extra_tags="login_message")
     return render(request, 'biims/login_page.html')
-
-@login_required
-def part_lookup(request):
-    part_list = HighVolume.objects.all()
-    paginator = Paginator(part_list, 10)
-    
-    page = request.GET.get('page')
-    try:
-        parts = paginator.page(page)
-    except PageNotAnInteger:
-        parts = paginator.page(1)
-    except EmptyPage:
-        parts = paginator.page(paginator.num_pages)
-
-    return render(
-            request, 
-            'biims/lookup.html', 
-            {"parts":parts})
-
-@login_required
-def asset_lookup(request):
-    asset_list = Asset.objects.all()
-    paginator = Paginator(asset_list, 10)
-
-    page = request.GET.get('page')
-
-    try:
-        assets = paginator.page(page)
-    except PageNotAnInteger:
-        assets = paginator.page(1)
-    except EmptyPage:
-        assets = paginator.page(paginator.num_pages)
-
-    return render(
-            request, 
-            'biims/lookup.html',
-            {"parts":assets})
 
 @login_required
 def search(request):
@@ -160,7 +123,7 @@ def ajax_search(request):
             low_volume_list,
             asset_list))
 
-        matches = fuzzy_pal(search_term, all_items)
+        matches = helpers.fuzzy_pal(search_term, all_items)
         return render(
                 request, 
                 'biims/ajax_search.html',
@@ -170,13 +133,9 @@ def new_item(request):
     if request.method == 'POST':
         form = NewItemForm(request.POST)
         if form.is_valid():
-            print(request.POST.get('item_name'))
-            print(request.POST.get('quantity'))
-            print(request.POST.get('storage_location'))
-            if not request.POST.get('consumable_location') == '':
-                print(request.POST.get('consumable_location'))
-            print(request.POST.get('reorder_point'))
-
+            form_data = helpers.get_new_item_form_data(request)
+            print(form_data)
+            helpers.add_item_via_form_data(form_data)
             return redirect('biims:options')
     else:
         form = NewItemForm()

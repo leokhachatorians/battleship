@@ -1,3 +1,6 @@
+from .models import Asset, HighVolume, LowVolume
+
+##### Fuzzy String Matching ######
 def fuzzy(pattern, db_item, adj_bonus=5, sep_bonus=10, camel_bonus=10,
                 lead_penalty=-3, max_lead_penalty=-9, unmatched_penalty=-1):
     """Return match boolean and match score.
@@ -110,3 +113,41 @@ def fuzzy_pal(search_term, search_list):
         cleaned_up.append(match[2])
 
     return cleaned_up[::-1][:20]
+
+##### Various Form Functions #####
+def get_new_item_form_data(request):
+    item_type = request.POST.get('item_type')
+    item_name = request.POST.get('item_name')
+    item_quantity = request.POST.get('quantity')
+    item_storage = request.POST.get('storage_location')
+
+    if not request.POST.get('consumable_location') == '':
+        item_consume = request.POST.get('consumable_location')
+    else:
+        item_consume = None
+
+    item_reorder = request.POST.get('reorder_point')
+
+    return (item_type, item_name, item_quantity,
+            item_storage, item_consume, item_reorder)
+
+
+##### Database CRUD Functions #####
+def add_item_via_form_data(form_data):
+    db_models = {
+            'low':LowVolume(),
+            'high':HighVolume(),
+            'asset':Asset()}
+
+    model = db_models[form_data[0]]
+
+    model.name = form_data[1]
+    model.quantity = form_data[2]
+    model.storage_location = form_data[3]
+    model.reorder_point = form_data[5]
+    model.last_reorder_date = None
+
+    if form_data[0] == 'high':
+        model.consumable_location = form_data[4]
+
+    model.save()
