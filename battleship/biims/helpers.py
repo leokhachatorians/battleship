@@ -1,3 +1,5 @@
+import itertools
+
 from .models import Asset, HighVolume, LowVolume
 
 ##### Fuzzy String Matching ######
@@ -151,3 +153,23 @@ def add_item_via_form_data(form_data):
         model.consumable_location = form_data[4]
 
     model.save()
+
+def combine_models_for_pagination():
+    high_volume_items = HighVolume.objects.all()
+    low_volume_items = LowVolume.objects.all()
+    asset_items = Asset.objects.all()
+
+    all_items = tuple(itertools.chain(
+        high_volume_items,
+        low_volume_items,
+        asset_items))
+
+    return all_items
+
+def check_if_item_exists(form_data):
+    name = form_data[1].lower()
+    models = (Asset, HighVolume, LowVolume)
+    for i in range(len(models)):
+        if models[i].objects.filter(name=name).exists():
+            return True
+

@@ -3,15 +3,20 @@
 {% block content %}
 
 <h1 class="post"> Create New Item </h1>
-<!--
-{% if form.errors %}
-  {% for field in form %}
-    {% for error in field.errors %}
-      <span class="red-error-flash" role="alert"> {{ error|escape }} </span>
+  {% if messages %}
+    {% for message in messages %}
+      {% ifequal message.tags "item_exists_error info" %}
+        <span class="new-item-error-flash" role="alert">
+          <strong>Error:</strong> {{ message }}
+        </span>
+      {% endifequal %}
+      {% ifequal message.tags "item_saved info" %}
+        <span class="new-item-good-flash" role="alert">
+          <strong>Success:</strong> {{ message }}
+        </span>
+        {% endifequal %}
     {% endfor %}
-  {% endfor %}
-{% endif %}
--->
+  {% endif %}
 
 <form method="POST" class="container"> {% csrf_token %}
   {% for field in form %}
@@ -37,10 +42,8 @@
       <br/>
     </div>
     {% endif %}
-
   </div>
   {% endfor %}
   <button type="submit">Create</button>
 </form>
-
 {% endblock %}

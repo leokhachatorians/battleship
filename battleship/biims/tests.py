@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.test import TestCase
 
 from biims.models import HighVolume, LowVolume, Asset
+import biims.helpers as helpers
 
 class ItemTestCase(TestCase):
     def test_high_volume_is_easy_consumbale(self):
@@ -69,6 +70,8 @@ class ItemTestCase(TestCase):
         item.increase_quantity(amount=2)
         self.assertEqual(item.quantity, 12)
    
-   
-   
- 
+    def test_catch_duplicate_files(self):
+        Asset.objects.create(name='leo')
+        
+        form_data_example = ('model_type', 'LEO')
+        self.assertTrue(helpers.check_if_item_exists(form_data_example))
