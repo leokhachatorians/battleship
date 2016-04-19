@@ -143,7 +143,7 @@ def add_item_via_form_data(form_data):
 
     model = db_models[form_data[0]]
 
-    model.name = form_data[1]
+    model.name = form_data[1].title()
     model.quantity = form_data[2]
     model.storage_location = form_data[3]
     model.reorder_point = form_data[5]
@@ -167,7 +167,7 @@ def combine_models_for_pagination():
     return all_items
 
 def check_if_item_exists(form_data):
-    name = form_data[1].lower()
+    name = form_data[1].title()
     models = (Asset, HighVolume, LowVolume)
     for i in range(len(models)):
         if models[i].objects.filter(name=name).exists():

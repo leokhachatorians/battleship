@@ -110,6 +110,7 @@ def ajax_search(request, template='biims/ajax_search.html'):
         matches = helpers.fuzzy_pal(search_term, all_items)
         return render(request, template, {"matches":matches})
 
+@login_required
 def new_item(request, template='biims/new_item.html'):
     if request.method == 'POST':
         form = NewItemForm(request.POST)
