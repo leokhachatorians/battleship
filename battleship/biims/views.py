@@ -46,7 +46,7 @@ def login(request,
                     request,
                     'Welcome {}'.format(request.user.username),
                     extra_tags="login_message")
-                return redirect('/biims/options')
+                return redirect('/options')
         else:
             messages.error(request,
                     'Invalid Credentials',
@@ -128,7 +128,7 @@ def new_item(request, template='biims/new_item.html'):
                         request,
                         'The item was saved.',
                         extra_tags='item_saved')
-                return redirect('/biims/new_item')
+                return redirect('/new_item')
     else:
         form = NewItemForm()
     return render(request, template, {'form':form})
