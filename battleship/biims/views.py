@@ -46,14 +46,14 @@ def login(request,
                     request,
                     'Welcome {}'.format(request.user.username),
                     extra_tags="login_message")
-                return redirect('/options')
+                return render(request, succesful_template)
         else:
             messages.error(request,
                     'Invalid Credentials',
                     extra_tags="wrong_login")
             return render(request, invalid_template)
     else:
-        return render(request, succesful_template)
+        return render(request, invalid_template)
 
 def logout(request, template='biims/login_page.html'):
     if request.user.is_authenticated():
@@ -128,7 +128,7 @@ def new_item(request, template='biims/new_item.html'):
                         request,
                         'The item was saved.',
                         extra_tags='item_saved')
-                return redirect('/new_item')
+                return redirect('new_item')
     else:
         form = NewItemForm()
     return render(request, template, {'form':form})
