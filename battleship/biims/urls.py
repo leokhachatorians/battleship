@@ -19,4 +19,7 @@ urlpatterns = [
 
         # New Item
         url(r'^new_item', views.new_item, name='new_item'),
+
+        # Remove Item Request
+        url(r'^remove_item', views.request_item_removal, name='remove_item'),
     ]

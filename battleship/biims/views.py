@@ -128,9 +128,12 @@ def new_item(request, template='biims/new_item.html'):
                         request,
                         'The item was saved.',
                         extra_tags='item_saved')
-                return redirect('new_item')
+                return redirect('/new_item')
     else:
         form = NewItemForm()
     return render(request, template, {'form':form})
     
-
+@login_required
+def request_item_removal(request, template='biims/item_removal.html'):
+    url = request.META.get('HTTP_REFERER', '/')
+    return render(request, template, {'url':url})
