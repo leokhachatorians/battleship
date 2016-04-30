@@ -1,4 +1,5 @@
 {% extends 'biims/base.html' %}
+{% load to_and %}
 {% block content %}
 <br/>
 <div class="row">
@@ -22,23 +23,23 @@
 
 <div class="row">
   <ul id="results">
-    {% for part in parts %}
+    {% for item in items %}
       <h1 class="post">
-        {{ part.name }}
-        {% if not part.is_easy_consumable %}
-          <a href="{% url 'biims:remove_item' %}" class="btn btn-danger">Add to Cart
+        {{ item.name|to_and }}
+        {% if not item.is_easy_consumable %}
+          <a href="{% url 'biims:remove_item_argument' item.name %}" class="btn btn-danger">Add to Cart
             <span class="glyphicon glyphicon-shopping-cart"></span>
           </a>
         {% endif %}
       </h1>
       <li>
-        <p class="post">Quantity: {{ part.quantity }}</p>
-        <p class="post">Storage Location: {{ part.storage_location }}</p>
-        {% if part.is_easy_consumable %}
-          <p class="post">Consumable Location: {{ part.consumable_location }}</p>
+        <p class="post">Quantity: {{ item.quantity }}</p>
+        <p class="post">Storage Location: {{ item.storage_location }}</p>
+        {% if item.is_easy_consumable %}
+          <p class="post">Consumable Location: {{ item.consumable_location }}</p>
         {% endif %}
-        <p class="post">Last Reorder: {{ part.last_reorder_date }}</p>
-        <p class="post">Last Reorder Quantity: {{ part.last_reorder_quantity }}</p>
+        <p class="post">Last Reorder: {{ item.last_reorder_date }}</p>
+        <p class="post">Last Reorder Quantity: {{ item.last_reorder_quantity }}</p>
        </li>
     {% endfor %}
   </ul>
@@ -46,8 +47,8 @@
 
 <nav>
   <ul class="pager">
-      {% if parts.has_previous %}
-        <li><a href="?page={{ parts.previous_page_number }}" aria-label="Previous">
+      {% if items.has_previous %}
+        <li><a href="?page={{ items.previous_page_number }}" aria-label="Previous">
           <span class="glyphicon glyphicon-chevron-left">
         </a></li>
       {% endif %}

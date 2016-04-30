@@ -1,5 +1,7 @@
 import itertools
 
+from django.http import Http404
+
 from .models import Asset, HighVolume, LowVolume
 
 ##### Fuzzy String Matching ######
@@ -143,7 +145,7 @@ def add_item_via_form_data(form_data):
 
     model = db_models[form_data[0]]
 
-    model.name = form_data[1].title()
+    model.name = form_data[1].title().replace(' ','-')
     model.quantity = form_data[2]
     model.storage_location = form_data[3]
     model.reorder_point = form_data[5]
@@ -173,3 +175,10 @@ def check_if_item_exists(form_data):
         if models[i].objects.filter(name=name).exists():
             return True
 
+def check_if_valid_item(item_name):
+    models = (Asset, HighVolume, LowVolume)
+    for i in range(len(models)):
+        if models[i].objects.filter(name=item_name).exists():
+            return models[i].objects.get(name=item_name)
+    else:
+        raise Http404('Not a valid item')

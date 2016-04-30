@@ -3,7 +3,7 @@
   <h1 class="post">
     {{ match.name }}
     {% if not match.is_easy_consumable %}
-      <a href="{% url 'biims:remove_item' %}" class="btn btn-danger">Add to Cart
+      <a href="{% url 'biims:remove_item_argument' match.name  %}" class="btn btn-danger">Add to Cart
         <span class="glyphicon glyphicon-shopping-cart"></span>
       </a>
     {% endif %}

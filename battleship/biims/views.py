@@ -92,7 +92,7 @@ def search(request, template='biims/search.html'):
 
     return render(request, template,
                 {
-                 "parts":items,
+                 "items":items,
                  "form":form
                 },)
 
@@ -134,6 +134,10 @@ def new_item(request, template='biims/new_item.html'):
     return render(request, template, {'form':form})
     
 @login_required
-def request_item_removal(request, template='biims/item_removal.html'):
+def request_item_removal(request, item_name=None, template='biims/item_removal.html'):
+    item = helpers.check_if_valid_item(item_name)
+    item.name = item.name.replace('-',' ')
     url = request.META.get('HTTP_REFERER', '/')
-    return render(request, template, {'url':url})
+    return render(request, template, {
+        'item':item,
+        'url':url})
