@@ -100,3 +100,10 @@ class ItemTestCase(TestCase):
         url = reverse('biims:remove_item', args=['item-should-not-exist'])
         response = self.client.get(url)
         self.assertEqual(404, response.status_code)
+
+    def test_200_if_requesting_valid_item(self):
+        Asset.objects.create(name='This-Item-Should-Exist')
+        self.client.login(username='temp', password='temp123')
+        url = reverse('biims:remove_item', args=['This-Item-Should-Exist'])
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
