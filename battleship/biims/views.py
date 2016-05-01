@@ -2,22 +2,17 @@ import sys
 import itertools
 import json
 
-from django.shortcuts import render, get_object_or_404, render_to_response, redirect
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.core.urlresolvers import reverse, reverse_lazy
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views import generic
-from django.utils import timezone
-from django.template import loader
+from django.contrib import messages
 from django.contrib.auth import authenticate, login as login_user, logout as logout_user
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404
+from django.shortcuts import render, redirect
 from django.template.context_processors import csrf
-from django.contrib import messages
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils import timezone
 
 from .models import HighVolume, LowVolume, Asset
-from .forms import SearchForm, NewItemForm
-from . import helpers
+from . import helpers, forms
 
 @login_required
 def options(request, template='biims/options.html'):
@@ -76,7 +71,7 @@ def search(request, template='biims/search.html'):
     Now the SearchForm is our gateway towards making ajax calls
     to our fuzzymatching thing, and that is displayed in 'ajax_search()'
     """
-    form = SearchForm()
+    form = forms.SearchForm()
 
     all_items = helpers.combine_models_for_pagination()
     paginator = Paginator(all_items, 20)
@@ -113,7 +108,7 @@ def ajax_search(request, template='biims/ajax_search.html'):
 @login_required
 def new_item(request, template='biims/new_item.html'):
     if request.method == 'POST':
-        form = NewItemForm(request.POST)
+        form = forms.NewItemForm(request.POST)
         if form.is_valid():
             form_data = helpers.get_new_item_form_data(request)
             if helpers.check_if_item_exists(form_data):
@@ -130,7 +125,7 @@ def new_item(request, template='biims/new_item.html'):
                         extra_tags='item_saved')
                 return redirect('/new_item')
     else:
-        form = NewItemForm()
+        form = forms.NewItemForm()
     return render(request, template, {'form':form})
     
 @login_required
@@ -139,5 +134,6 @@ def request_item_removal(request, item_name=None, template='biims/item_removal.h
     item.name = item.name.replace('-',' ')
     url = request.META.get('HTTP_REFERER', '/')
     return render(request, template, {
+        'user':request.user,
         'item':item,
         'url':url})

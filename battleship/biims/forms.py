@@ -11,6 +11,14 @@ class SearchForm(forms.Form):
                 {'placeholder': 'Search',
                 'class':'search-query form-control',
                 'id':'search-term',}))
+
+class RequestItemForm(forms.Form):
+    quantity_needed = forms.IntegerField(
+            label='Quantity Needed',
+            widget=forms.NumberInput(attrs=
+                {'placeholder':'Quantity',
+                 'min':'0',
+                 'id':'quantity-needed'}))
  
 class NewItemForm(forms.Form):
     item_type = forms.ChoiceField(choices=
@@ -36,7 +44,8 @@ class NewItemForm(forms.Form):
         widget = forms.NumberInput(attrs=
             {'placeholder':'Quantity',
             'title':'How many?',
-            'id':'item-quantity'}),
+            'id':'item-quantity',
+            'min':'0'}),
         required=True)
 
     storage_location = forms.CharField(
