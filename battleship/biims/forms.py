@@ -16,7 +16,7 @@ class RequestItemForm(forms.Form):
     quantity_needed = forms.IntegerField(
             label='Quantity Needed',
             widget=forms.NumberInput(attrs=
-                {'placeholder':'Quantity',
+                {'placeholder':'Quantity Needed',
                  'min':'0',
                  'id':'quantity-needed'}))
  

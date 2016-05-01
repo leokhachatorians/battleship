@@ -22,5 +22,5 @@ urlpatterns = [
 
         # Remove Item Request
         #url(r'^remove_item/', views.request_item_removal, name='remove_item_plain'),
-        url(r'^remove_item/(?P<item_name>[-\w]+)', views.request_item_removal, name='remove_item_argument'),
+        url(r'^remove_item/(?P<item_name>[-\w]+)', views.request_item_removal, name='remove_item'),
     ]

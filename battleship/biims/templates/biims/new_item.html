@@ -21,8 +21,8 @@
 <form method="POST" class="container"> {% csrf_token %}
   {% for field in form %}
   <div class="row" id="{{ field.auto_id }}">
-    <div class="col-xs-12 col-sm-2">
-      <p class="post">{{ field.label_tag }}</p>
+    <div class="col-xs-12 col-sm-2 post">
+      <p>{{ field.label_tag }}</p>
     </div>
     <div class="col-xs-12 col-sm-3 col-md-3">
       {{ field }}

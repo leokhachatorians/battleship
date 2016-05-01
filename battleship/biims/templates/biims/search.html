@@ -27,19 +27,19 @@
       <h1 class="post">
         {{ item.name|to_and }}
         {% if not item.is_easy_consumable %}
-          <a href="{% url 'biims:remove_item_argument' item.name %}" class="btn btn-danger">Add to Cart
+          <a href="{% url 'biims:remove_item' item.name %}" class="btn btn-danger">Add to Cart
             <span class="glyphicon glyphicon-shopping-cart"></span>
           </a>
         {% endif %}
       </h1>
       <li>
-        <p class="post">Quantity: {{ item.quantity }}</p>
-        <p class="post">Storage Location: {{ item.storage_location }}</p>
+        <p>Quantity: {{ item.quantity }}</p>
+        <p>Storage Location: {{ item.storage_location }}</p>
         {% if item.is_easy_consumable %}
-          <p class="post">Consumable Location: {{ item.consumable_location }}</p>
+          <p>Consumable Location: {{ item.consumable_location }}</p>
         {% endif %}
-        <p class="post">Last Reorder: {{ item.last_reorder_date }}</p>
-        <p class="post">Last Reorder Quantity: {{ item.last_reorder_quantity }}</p>
+        <p>Last Reorder: {{ item.last_reorder_date }}</p>
+        <p>Last Reorder Quantity: {{ item.last_reorder_quantity }}</p>
        </li>
     {% endfor %}
   </ul>

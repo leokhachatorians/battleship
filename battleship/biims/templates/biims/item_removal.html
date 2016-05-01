@@ -1,11 +1,58 @@
 {% extends 'biims/base.html' %}
 {% block content %}
 <br/>
-
-<h1 class="post"> {{ item.name }} </h1>
-<p class='post'> {{ user.username }} </p>
-<button type="submit">Continue</button>
+<h1 class="post">Checkout</h1>
+<form method='post' class='container'> {% csrf_token %}
+  <div class="row">
+    <div class="col-xs-12 col-sm-2 post">
+      <p><strong>User:</strong></p>
+    </div>
+    <div class="col-xs-12 col-sm-3 col-md-3 post">
+      {{ user.username }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-2 post">
+      <p><strong>Item:</strong>
+    </div>
+    <div class="col-xs-12 col-sm-3 post">
+      {{ item.name }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xs-12 col-sm-2 post">
+      <p><strong>Quantity Left:</strong>
+    </div>
+    <div class="col-xs-12 col-sm-3 post">
+      {{ item.quantity }}
+    </div>
+  </div>
+  {% for field in form %}
+  <div class="row">
+    <div class="col-xs-12 col-sm-2 post">
+      <p>{{ field.label_tag }}</p>
+    </div>
+    <div class="col-xs-12 col-sm-3 col-md-3">
+      {{ field }}
+    </div>
+    {% if field.errors %}
+    <div class="col-sm-4 col-md-3 hidden-xs">
+      <span class="new-item-error-flash" role="alert">
+        <strong>Error:</strong> {{ field.errors|striptags }}
+      </span>
+    </div>
+    <div class="col-xs-9 visibile-xs-block">
+      <span class="new-item-error-flash" role="alert">=
+        <strong>Error:</strong> {{ field.errors|striptags }}
+      </span>
+    </div>
+    <div class="col-xs-12 visible-xs-block">
+      <br/>
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+  <button type="submit">Request</button>
+</form>
 <h3><a class="btn-lg option" href="{{ url }}">Back</a></h3>
-
-
 {% endblock %}

@@ -2,11 +2,16 @@ import datetime
 
 from django.utils import timezone
 from django.test import TestCase
+from django.core.urlresolvers import reverse
+from django.contrib.auth.models import User
 
 from biims.models import HighVolume, LowVolume, Asset
 import biims.helpers as helpers
 
 class ItemTestCase(TestCase):
+    def setUp(self):
+        user = User.objects.create_user('temp', 'temp@test.com', 'temp123')
+
     def test_high_volume_is_easy_consumbale(self):
         item = HighVolume()
         self.assertTrue(item.is_easy_consumable)
@@ -71,7 +76,27 @@ class ItemTestCase(TestCase):
         self.assertEqual(item.quantity, 12)
    
     def test_catch_duplicate_files(self):
-        Asset.objects.create(name='leo')
-        
+        Asset.objects.create(name='Leo')
         form_data_example = ('model_type', 'LEO')
         self.assertTrue(helpers.check_if_item_exists(form_data_example))
+
+    def test_check_if_valid_function(self):
+        HighVolume.objects.create(name='Test-Tester')
+        self.assertTrue(helpers.check_if_valid_item('Test-Tester'))
+
+    def test_redirects_if_not_logged_in(self):
+        urls = ['options', 'search', 'ajax_search', 'new_item']
+        for url in urls:
+            url = reverse('biims:{}'.format(url))
+            response = self.client.get(url)
+            self.assertRedirects(response, '/login?next={}'.format(url))
+
+        url = reverse('biims:remove_item', args=['test'])
+        response = self.client.get(url)
+        self.assertRedirects(response, '/login?next={}'.format(url))
+    
+    def test_404_if_requesting_invalid_item(self):
+        self.client.login(username='temp', password='temp123')
+        url = reverse('biims:remove_item', args=['item-should-not-exist'])
+        response = self.client.get(url)
+        self.assertEqual(404, response.status_code)

@@ -130,10 +130,12 @@ def new_item(request, template='biims/new_item.html'):
     
 @login_required
 def request_item_removal(request, item_name=None, template='biims/item_removal.html'):
+    form = forms.RequestItemForm()
     item = helpers.check_if_valid_item(item_name)
     item.name = item.name.replace('-',' ')
     url = request.META.get('HTTP_REFERER', '/')
     return render(request, template, {
+        'form':form,
         'user':request.user,
         'item':item,
         'url':url})
